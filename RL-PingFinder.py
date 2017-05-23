@@ -12,40 +12,41 @@ Created on Sat May 20 22:03:13 2017
 import subprocess
 import re
 from tkinter import *
-import time
+
 from threading import Thread
-import os
+
 import urllib.request
 hosts=''
-with urllib.request.urlopen("file:///E:/Projects/Server-Pinger-For-RL/IP.txt") as url:
+#with urllib.request.urlopen("file:///E:/Projects/Server-Pinger-For-RL/IP.txt") as url:
+with urllib.request.urlopen("https://raw.githubusercontent.com/kushalnaidu/Server-Pinger-For-RL/master/IP.txt") as url:
     s = url.read()
-print(s)
+
 qq=(s.decode('utf-8'))
-print(qq)
+
 hosts=qq.split()
-print(hosts)
+#print(hosts)
 main=Tk()
-name=['?ms','?ms','?ms','?ms','?ms']
-
+name=['?ms']*len(hosts)
 cmd="ping 72.5.161.230"
-i=0
+
 line=''
-
-
+#https://stackoverflow.com/questions/19491546/creating-stringvar-class-variables
 
 def create_worker(target):
     return Thread(target=target)
 
-
 def start_worker(worker):
     worker.start()
 
-    
-    
-    
 def GetPings():
+    var1.set(name[0])
+    var2.set(name[1])
+    var3.set(name[2])
+    var4.set(name[3])
+    var5.set(name[4])
+    var6.set(name[5])
     while(True):
-        for i in range(5):
+        for i in range(len(hosts)):
             try:
                 popen = subprocess.Popen(["ping",hosts[i],"-n","1"], stdout=subprocess.PIPE, bufsize=1,shell=True)
                 lines_iterator = iter(popen.stdout.readline, b"")
@@ -70,19 +71,21 @@ def GetPings():
             var3.set(name[2])
             var4.set(name[3])
             var5.set(name[4])
+            var6.set(name[5])
     
 
 main.title("Ping Finder")
-main.minsize(width=300, height=200)
-main.maxsize(width=300, height=200)
+main.minsize(width=300, height=240)
+main.maxsize(width=300, height=240)
 
 var1=StringVar()
 var2=StringVar()
 var3=StringVar()
 var4=StringVar()
 var5=StringVar()
+var6=StringVar()
 
-label1 = Label( main, text="Ping to ASCxx :\n\nPing to ASCxxxxxx :\n\nPing to ASC1000/1001 :\n\nPing to Middle-East :\n\nPing to Oceania :" ,anchor=W, justify=RIGHT)
+label1 = Label( main, text="Ping to ASCxx :\n\nPing to ASCxxxxxx :\n\nPing to ASC1000/1001 :\n\nPing to Asia-East(JPN) :\n\nPing to Middle-East :\n\nPing to Oceania :" ,anchor=W, justify=RIGHT)
 ping1 = Label( main, textvariable=var1 , justify=LEFT)
 
 ping2 = Label( main, textvariable=var2 , justify=RIGHT)
@@ -93,12 +96,15 @@ ping4 = Label( main, textvariable=var4 , justify=RIGHT)
 
 ping5 = Label( main, textvariable=var5 , justify=RIGHT)
 
-label1.grid(row=4,column=0,rowspan=5,padx=0)
+ping6 = Label( main, textvariable=var6 , justify=RIGHT)
+
+label1.grid(row=4,column=0,rowspan=6,padx=0)
 ping1.grid(row=4,column=2)
 ping2.grid(row=5,column=2)
 ping3.grid(row=6,column=2)
 ping4.grid(row=7,column=2)
 ping5.grid(row=8,column=2)
+ping6.grid(row=9,column=2)
 worker = create_worker(GetPings)
 
 
