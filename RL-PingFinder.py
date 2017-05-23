@@ -14,9 +14,19 @@ import re
 from tkinter import *
 import time
 from threading import Thread
+import os
+import urllib.request
+hosts=''
+with urllib.request.urlopen("file:///E:/Projects/Server-Pinger-For-RL/IP.txt") as url:
+    s = url.read()
+print(s)
+qq=(s.decode('utf-8'))
+print(qq)
+hosts=qq.split()
+print(hosts)
 main=Tk()
 name=['?ms','?ms','?ms','?ms','?ms']
-hosts = ['45.76.153.116','hkserverworks.com','72.5.161.230','185.179.203.27','109.22.215.75']
+
 cmd="ping 72.5.161.230"
 i=0
 line=''
@@ -61,7 +71,6 @@ def GetPings():
             var4.set(name[3])
             var5.set(name[4])
     
-    #GetPings()
 
 main.title("Ping Finder")
 main.minsize(width=300, height=200)
