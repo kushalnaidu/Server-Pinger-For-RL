@@ -30,22 +30,36 @@ name=['?ms']*len(hosts)
 cmd="ping 72.5.161.230"
 
 line=''
-#https://stackoverflow.com/questions/19491546/creating-stringvar-class-variables
-
-def create_worker(target):
+stringvar=[]
+for i in range(len(hosts)):
+    stringvar.append(StringVar())
+    
+continue_ping=False;
+def StopWorker():
+    global continue_ping
+    if not continue_ping:
+        main.destroy()
+    
+    continue_ping=False;
+def CreateWorker(target):
     return Thread(target=target)
 
-def start_worker(worker):
-    worker.start()
+def StartWorker(worker):
+    continue_ping=True
+    if(worker.is_alive()):
+        pass;
+    else:
+        worker.daemon=True
+        worker.start()
+        
+
 
 def GetPings():
-    var1.set(name[0])
-    var2.set(name[1])
-    var3.set(name[2])
-    var4.set(name[3])
-    var5.set(name[4])
-    var6.set(name[5])
-    while(True):
+    global continue_ping
+    continue_ping=True
+    for i in range(len(stringvar)):
+        stringvar[i].set(name[i])
+    while(continue_ping):
         for i in range(len(hosts)):
             try:
                 popen = subprocess.Popen(["ping",hosts[i],"-n","1"], stdout=subprocess.PIPE, bufsize=1,shell=True)
@@ -66,37 +80,33 @@ def GetPings():
     #                    name[i]=0
     #            except:
                 
-            var1.set(name[0])
-            var2.set(name[1])
-            var3.set(name[2])
-            var4.set(name[3])
-            var5.set(name[4])
-            var6.set(name[5])
+            for i in range(len(stringvar)):
+                stringvar[i].set(name[i])
+#            stringvar[1].set("2")
+            if not continue_ping:
+                break;
+#    print(continue_ping)
+    #worker._stop()
+    main.destroy()
+                
     
 
 main.title("Ping Finder")
-main.minsize(width=300, height=240)
-main.maxsize(width=300, height=240)
-
-var1=StringVar()
-var2=StringVar()
-var3=StringVar()
-var4=StringVar()
-var5=StringVar()
-var6=StringVar()
+main.minsize(width=350, height=300)
+main.maxsize(width=350, height=300)
 
 label1 = Label( main, text="Ping to ASCxx :\n\nPing to ASCxxxxxx :\n\nPing to ASC1000/1001 :\n\nPing to Asia-East(JPN) :\n\nPing to Middle-East :\n\nPing to Oceania :" ,anchor=W, justify=RIGHT)
-ping1 = Label( main, textvariable=var1 , justify=LEFT)
+ping1 = Label( main, textvariable=stringvar[0] , justify=RIGHT)
 
-ping2 = Label( main, textvariable=var2 , justify=RIGHT)
+ping2 = Label( main, textvariable=stringvar[1] , justify=RIGHT)
 
-ping3 = Label( main, textvariable=var3 , justify=RIGHT)
+ping3 = Label( main, textvariable=stringvar[2] , justify=RIGHT)
 
-ping4 = Label( main, textvariable=var4 , justify=RIGHT)
+ping4 = Label( main, textvariable=stringvar[3] , justify=RIGHT)
 
-ping5 = Label( main, textvariable=var5 , justify=RIGHT)
+ping5 = Label( main, textvariable=stringvar[4] , justify=RIGHT)
 
-ping6 = Label( main, textvariable=var6 , justify=RIGHT)
+ping6 = Label( main, textvariable=stringvar[5] , justify=RIGHT)
 
 label1.grid(row=4,column=0,rowspan=6,padx=0)
 ping1.grid(row=4,column=2)
@@ -105,12 +115,15 @@ ping3.grid(row=6,column=2)
 ping4.grid(row=7,column=2)
 ping5.grid(row=8,column=2)
 ping6.grid(row=9,column=2)
-worker = create_worker(GetPings)
+worker = CreateWorker(GetPings)
 
-
-Bmain=Button(main, text ="Find Pings",command=lambda: start_worker(worker))
+Bmain=Button(main, text ="Find Pings",command=lambda: StartWorker(worker))
+Bmain2=Button(main, text ="Exit",command=StopWorker)
+label2 = Label( main, text="Developed by Kushal Naidu. Contact: akushalnaidu@gmail.com" ,anchor=S, justify=RIGHT)
+label2.grid(row=11,column=0,columnspan=5,padx=5)
 Bmain.grid(row=0,column=1,pady=10)
-
+Bmain2.grid(row=10,column=1,pady=10)
+main.protocol("WM_DELETE_WINDOW", StopWorker)
 main.mainloop()
 
 
