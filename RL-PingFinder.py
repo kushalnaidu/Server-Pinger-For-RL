@@ -12,11 +12,12 @@ Created on Sat May 20 22:03:13 2017
 import subprocess
 import re
 from tkinter import *
-
+main=Tk()
+import webbrowser
 from threading import Thread
-
 import urllib.request
 hosts=''
+
 #with urllib.request.urlopen("file:///E:/Projects/Server-Pinger-For-RL/IP.txt") as url:
 with urllib.request.urlopen("https://raw.githubusercontent.com/kushalnaidu/Server-Pinger-For-RL/master/IP.txt") as url:
     s = url.read()
@@ -25,7 +26,7 @@ qq=(s.decode('utf-8'))
 
 hosts=qq.split()
 #print(hosts)
-main=Tk()
+
 name=['?ms']*len(hosts)
 cmd="ping 72.5.161.230"
 
@@ -35,6 +36,10 @@ for i in range(len(hosts)):
     stringvar.append(StringVar())
     
 continue_ping=False;
+
+def callback(event):
+    webbrowser.open_new(r"https://steamcommunity.com/id/CsProDude/")
+    
 def StopWorker():
     global continue_ping
     if not continue_ping:
@@ -119,8 +124,11 @@ worker = CreateWorker(GetPings)
 
 Bmain=Button(main, text ="Find Pings",command=lambda: StartWorker(worker))
 Bmain2=Button(main, text ="Exit",command=StopWorker)
-label2 = Label( main, text="Developed by Kushal Naidu. Contact: akushalnaidu@gmail.com" ,anchor=S, justify=RIGHT)
-label2.grid(row=11,column=0,columnspan=5,padx=5)
+linkt = Label(main, text="For Suggestions/Feedback : ")
+link = Label(main, text="Steam ID", fg="blue", cursor="hand2")
+linkt.grid(row=11,column=0,columnspan=3,padx=5)
+link.grid(row=11,column=4,padx=5)
+link.bind("<Button-1>", callback)
 Bmain.grid(row=0,column=1,pady=10)
 Bmain2.grid(row=10,column=1,pady=10)
 main.protocol("WM_DELETE_WINDOW", StopWorker)
