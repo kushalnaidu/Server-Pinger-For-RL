@@ -19,8 +19,8 @@ import urllib.request
 hosts=''
 # #B9B9B9
 main.configure(bg='#3f3f3f')
-#with urllib.request.urlopen("file:///E:/Projects/Server-Pinger-For-RL/IP.txt") as url:
-with urllib.request.urlopen("https://raw.githubusercontent.com/kushalnaidu/Server-Pinger-For-RL/master/IP.txt") as url:
+with urllib.request.urlopen("file:///E:/Projects/Server-Pinger-For-RL/IP.txt") as url:
+#with urllib.request.urlopen("https://raw.githubusercontent.com/kushalnaidu/Server-Pinger-For-RL/master/IP.txt") as url:
     s = url.read()
 qq=(s.decode('utf-8'))
 
@@ -33,12 +33,13 @@ line=''
 stringvar=[]
 for i in range(len(hosts)):
     stringvar.append(StringVar())
-both = StringVar()
+
 continue_ping=False;
 
 def callback(event):
     webbrowser.open_new(r"https://steamcommunity.com/id/CsProDude/")
-    
+def gamelaunch():
+    webbrowser.open_new(r'steam://rungameid/252950')
 def StopWorker():
     global continue_ping
     if not continue_ping:
@@ -58,14 +59,13 @@ def StartWorker(worker):
         worker.start()
         
 
-both.set("{}/{}".format(stringvar[7].get(),stringvar[8].get()))
 def GetPings():
     global continue_ping
     continue_ping=True
     for i in range(len(stringvar)):
         stringvar[i].set(name[i])
     while(continue_ping):
-        both.set("{}/{}".format(stringvar[7].get(),stringvar[8].get()))
+        
         for i in range(len(hosts)):
             try:
                 popen = subprocess.Popen(["ping",hosts[i],"-n","1"], stdout=subprocess.PIPE, bufsize=1,shell=True)
@@ -113,11 +113,11 @@ def hlp():
     lbl.configure(fg="#B9B9B9")
     lbl.configure(bg="#3f3f3f")
 main.title("Ping Tester")
-main.minsize(width=330, height=220)
-main.maxsize(width=330, height=220)
+main.minsize(width=330, height=230)
+main.maxsize(width=330, height=230)
 
-label1 = Label( main, text="ASCxx :\n\nASCxxxxxx :\n\nASC1000/1001 :\n\nAsia-East(JPN) :" ,anchor=S, justify=RIGHT)
-label2 = Label( main, text="Middle-East :\n\nOceania :\n\nEUxxxxxx :\n\n EUxx :",anchor=S, justify=RIGHT)
+label1 = Label( main, text="ASCxx :\n\nASCxxxxxx :\n\nASC1000/1001 :\n\nASC-xxx-xxxxx :\n\nAsia-East(JPN) :" ,anchor=S, justify=RIGHT)
+label2 = Label( main, text="Middle-East :\n\nOceania :\n\nEUxxxxxx :\n\n EUxx :\n\n EUxx :",anchor=S, justify=RIGHT)
 #label1 = Label( main, text="ASCxx" ,anchor=S, justify=RIGHT)
 #label2 = Label( main, text="ASCxx" ,anchor=S, justify=RIGHT)
 #label3 = Label( main, text="ASCxx" ,anchor=S, justify=RIGHT)
@@ -134,7 +134,9 @@ ping4 = Label( main, textvariable=stringvar[3] , justify=RIGHT)
 ping5 = Label( main, textvariable=stringvar[4] , justify=RIGHT)
 ping6 = Label( main, textvariable=stringvar[5] , justify=RIGHT)
 ping7 = Label( main, textvariable=stringvar[6] , justify=RIGHT)
-ping8 = Label( main, textvariable=both , justify=RIGHT)
+ping8 = Label( main, textvariable=stringvar[7] , justify=RIGHT)
+ping9 = Label( main, textvariable=stringvar[8] , justify=RIGHT)
+ping10 = Label( main, textvariable=stringvar[9] , justify=RIGHT)
 
 ping1.configure(bg="#3f3f3f")
 ping1.configure(fg="#B9B9B9")
@@ -152,26 +154,32 @@ ping7.configure(bg="#3f3f3f")
 ping7.configure(fg="#B9B9B9")
 ping8.configure(bg="#3f3f3f")
 ping8.configure(fg="#B9B9B9")
+ping9.configure(bg="#3f3f3f")
+ping9.configure(fg="#B9B9B9")
+ping10.configure(bg="#3f3f3f")
+ping10.configure(fg="#B9B9B9")
 
 label1.configure(bg="#3f3f3f")
 label2.configure(bg="#3f3f3f")
 label1.configure(fg="#B9B9B9")
 label2.configure(fg="#B9B9B9")
-label1.grid(row=4,column=0,rowspan=4,padx=0)
-label2.grid(row=4,column=2,rowspan=4,padx=0)
+label1.grid(row=4,column=0,rowspan=5,padx=0)
+label2.grid(row=4,column=2,rowspan=5,padx=0)
 ping1.grid(row=4,column=1,pady=5)
 ping2.grid(row=5,column=1,pady=5)
 ping3.grid(row=6,column=1,pady=5)
 ping4.grid(row=7,column=1,pady=5)
-ping5.grid(row=4,column=3,pady=5)
-ping6.grid(row=5,column=3,pady=5)
-ping7.grid(row=6,column=3,pady=5)
-ping8.grid(row=7,column=3,pady=5)
+ping5.grid(row=8,column=1,pady=5)
+ping6.grid(row=4,column=3,pady=5)
+ping7.grid(row=5,column=3,pady=5)
+ping8.grid(row=6,column=3,pady=5)
+ping9.grid(row=7,column=3,pady=5)
+ping10.grid(row=8,column=3,pady=5)
 
 
 worker = CreateWorker(GetPings)
 Bmain=Button(main,  text ="Test Pings",command=lambda: StartWorker(worker),relief=GROOVE)
-Bmain2=Button(main, text="Exit",command=StopWorker,relief=GROOVE)
+Bmain2=Button(main, text="Launch RocketLeague",command=gamelaunch,relief=GROOVE)
 Help=Button(main,  text ="Help",command=hlp,relief=GROOVE)
 Bmain.configure(fg="#B9B9B9")
 Bmain2.configure(fg="#B9B9B9")
@@ -190,7 +198,7 @@ linkt.configure(fg="#B9B9B9")
 Bmain.grid(row=0,column=0,columnspan=4,ipadx=10,pady=5)
 Bmain2.grid(row=10,column=0,columnspan=4,ipadx=10,pady=5)
 Help.grid(row=0,column=3,sticky=E+N)
-main.protocol("WM_DELETE_WINDOW", StopWorker)
+#main.protocol("WM_DELETE_WINDOW", StopWorker)
 Help.configure(fg="#B9B9B9")
 Help.configure(bg="#3f3f3f")
 
